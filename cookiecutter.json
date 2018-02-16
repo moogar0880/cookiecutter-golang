@@ -1,14 +1,15 @@
 {
-    "full_name": "Luis Morales",
-    "github_username": "lacion",
     "app_name": "mygolangproject",
-    "project_short_description": "A Golang project.",
+    "docker_build_image": "lacion/docker-alpine:gobuildimage",
     "docker_hub_username": "lacion",
     "docker_image": "lacion/docker-alpine:latest",
-    "docker_build_image": "lacion/docker-alpine:gobuildimage",
+    "full_name": "Luis Morales",
+    "git_root": "github.com",
+    "github_username": "lacion",
+    "project_short_description": "A Golang project.",
     "use_docker": "y",
     "use_git": "y",
     "use_logrus_logging": "y",
     "use_viper_config": "y",
-    "use_ci": ["travis", "circle", "none"]
+    "vendor_tool": ["glide", "dep", null]
 }
