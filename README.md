@@ -7,7 +7,6 @@ Powered by [Cookiecutter](https://github.com/audreyr/cookiecutter), Cookiecutter
 ## Features
 
 - Generous `Makefile` with management commands
-- Uses [glide](https://github.com/Masterminds/glide) for dependency management
 
 ## Optional Integrations
 
@@ -16,10 +15,10 @@ Powered by [Cookiecutter](https://github.com/audreyr/cookiecutter), Cookiecutter
 - Can creates dockerfile for building go binary and dockerfile for final go binary (no code in final container)
 - If docker is used adds docker management commands to makefile
 - Option of TravisCI, CircleCI or None
+- Option of [dep](https://github.com/golang/dep), [glide](https://github.com/Masterminds/glide), or None for dependency management
 
 ## Constraints
 
-- Uses glide as only option for depency management
 - Only maintained 3rd party libraries are used.
 
 This project now uses docker multistage builds you need at least docker version v17.05.0-ce to use the docker file in this template, [you can read more about multistage builds here](https://www.critiqus.com/post/multi-stage-docker-builds/).

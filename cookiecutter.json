@@ -12,5 +12,5 @@
     "use_git": "y",
     "use_logrus_logging": "y",
     "use_viper_config": "y",
-    "vendor_tool": ["glide", "dep", null]
+    "vendor_tool": ["dep", "glide", null]
 }
