@@ -8,7 +8,7 @@ You can contribute in many ways:
 
 ### Report Bugs
 
-Report bugs at https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.app_name }}/issues.
+Report bugs at https://{{cookiecutter.git_root}}/{{ cookiecutter.github_username }}/{{ cookiecutter.app_name }}/issues.
 
 If you are reporting a bug, please include:
 
