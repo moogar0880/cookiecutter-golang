@@ -1,0 +1,10 @@
+{% if cookiecutter.use_viper_config == "y" %}
+[[constraint]]
+  name = "github.com/spf13/viper"
+  branch = "master"
+{% endif %}
+{% if cookiecutter.use_logrus_logging == "y" %}
+[[constraint]]
+  name = "github.com/sirupsen/logrus"
+  branch = "master"
+{% endif %}
