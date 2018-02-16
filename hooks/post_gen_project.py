@@ -13,6 +13,7 @@ from subprocess import Popen
 # Get the root project directory
 PROJECT_DIRECTORY = os.path.realpath(os.path.curdir)
 
+
 def remove_file(filename):
     """
     generic remove file from project dir
@@ -20,6 +21,7 @@ def remove_file(filename):
     fullpath = os.path.join(PROJECT_DIRECTORY, filename)
     if os.path.exists(fullpath):
         os.remove(fullpath)
+
 
 def init_git():
     """
@@ -45,6 +47,7 @@ def remove_docker_files():
             PROJECT_DIRECTORY, filename
         ))
 
+
 def remove_viper_files():
     """
     Removes files needed for viper config utils
@@ -53,6 +56,7 @@ def remove_viper_files():
         PROJECT_DIRECTORY, "config"
     ))
 
+
 def remove_logrus_files():
     """
     Removes files needed for viper config utils
@@ -60,6 +64,7 @@ def remove_logrus_files():
     shutil.rmtree(os.path.join(
         PROJECT_DIRECTORY, "log"
     ))
+
 
 # 1. Remove Dockerfiles if docker is not going to be used
 if '{{ cookiecutter.use_docker }}'.lower() != 'y':
@@ -87,3 +92,12 @@ if '{{ cookiecutter.use_git }}'.lower() == 'y':
     init_git()
 else:
     remove_file(".gitignore")
+
+if '{{ cookiecutter.vendor_tool }}'.lower() == 'glide':
+    remove_file('Gopkg.toml')
+elif '{{ cookiecutter.vendor_tool }}'.lower() == 'dep':
+    remove_file('glide.yaml')
+else:
+    remove_file('Gopkg.toml')
+    remove_file('glide.yaml')
+
