@@ -46,7 +46,8 @@ def remove_docker_files():
         path = os.path.join(
             PROJECT_DIRECTORY, filename
         )
-        if os.path.exists:
+        
+        if os.path.exists(path):
             os.remove(path)
 
 
