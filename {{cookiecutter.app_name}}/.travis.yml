@@ -1,9 +1,9 @@
 language: go
 
 go:
-  - 1.8.x
+  - 1.10.x
   - master
 
 install:
-  - go get -v github.com/Masterminds/glide 
-  - make get-deps
+  - go get -u github.com/golang/dep/cmd/dep
+  - make vendor

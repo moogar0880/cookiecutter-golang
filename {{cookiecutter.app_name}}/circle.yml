@@ -1,6 +1,6 @@
 machine:
   environment:
-    GODIST: "go1.8.linux-amd64.tar.gz"
+    GODIST: "go1.10.linux-amd64.tar.gz"
     IMPORT_PATH: "github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME"
   post:
     - mkdir -p download
@@ -10,12 +10,12 @@ machine:
 
 dependencies:
   pre:
-    - go get github.com/Masterminds/glide
+    - go get -u github.com/golang/dep/cmd/dep
   override:
-    - make get-deps
+    - make vendor
     - mkdir -p "$GOPATH/src/$IMPORT_PATH"
     - rsync -azC --delete ./ "$GOPATH/src/$IMPORT_PATH/"
 
 test:
   override:
-    - make
+    - make test
