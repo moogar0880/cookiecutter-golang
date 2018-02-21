@@ -1,4 +1,4 @@
-{% if cookiecutter.project_type == "service" %}
+{% if cookiecutter.project_type == "service" -%}
 BIN_NAME={{cookiecutter.app_name}}
 
 VERSION=$(shell git describe --tags 2> /dev/null || echo '0.0.0')
@@ -11,15 +11,15 @@ IMAGE_NAME := "{{cookiecutter.docker_hub_username}}/{{cookiecutter.app_name}}"
 ifneq ($(strip $(GIT_DIRTY)),)
 PRERELEASE=DEV
 endif
-{% endif %}
+{% endif -%}
 
-{% if cookiecutter.project_type == "service" %}
+{%- if cookiecutter.project_type == "service" -%}
 .PHONY: all
 all: clean vendor binary test
-{% else %}
+{% else -%}
 .PHONY: all
 all: clean vendor test
-{% endif %}
+{% endif -%}
 
 .PHONY: help
 help:
@@ -31,28 +31,28 @@ help:
 	@echo '    make test/benchmark  Run benchmark tests on the project.'
 	@echo '    make test/coverage   Generate and view HTML coverage report in a browser.'
 	@echo '    make vendor          runs {{cookiecutter.vendor_tool}} to fetch vendor dependencies.'
-	{% if cookiecutter.project_type == "service" %}
+	{% if cookiecutter.project_type == "service" -%}
 	@echo '    make binary          Compile the binary for this project.'
 	@echo '    make build-alpine    Compile optimized for alpine linux.'
 	@echo '    make package         Build final docker image with just the go binary inside'
 	@echo '    make push            Push tagged images to registry'
 	@echo '    make tag             Tag image created by package with latest, git commit and version'
-	{% endif %}
+	{% endif -%}
 	@echo
 
 ##############################################################################
 # The following targets are used for aiding in development and CI for the 
 # {{cookiecutter.app_name}} source code
 ##############################################################################
-{% if cookiecutter.project_type == "service" %}
+{% if cookiecutter.project_type == "service" -%}
 .PHONY: clean
 clean:
 	@test ! -e bin/${BIN_NAME} || rm bin/${BIN_NAME} && go clean
-{% else %}
+{% else -%}
 .PHONY: clean
 clean:
-	@test ! -e bin/${BIN_NAME} || rm bin/${BIN_NAME} && go clean
-{% endif %}
+	go clean
+{% endif -%}
 
 .PHONY: test
 test:
@@ -66,17 +66,17 @@ test/benchmark:
 test/coverage: test
 	go tool cover -html=coverage.out
 
-{% if cookiecutter.vendor_tool == "glide" %}
+{% if cookiecutter.vendor_tool == "glide" -%}
 .PHONY: vendor
 vendor:
 	glide install
-{% elif cookiecutter.vendor_tool == "dep" %}
+{% elif cookiecutter.vendor_tool == "dep" -%}
 .PHONY: vendor
 vendor:
 	dep ensure
 {% endif %}
 
-{% if cookiecutter.use_docker == "y" %}
+{% if cookiecutter.use_docker == "y" -%}
 ##############################################################################
 # The following targets are used for packaging the {{cookiecutter.app_name}}
 # binary into a docker container
@@ -111,4 +111,4 @@ push: tag
 	docker push $(IMAGE_NAME):$(GIT_COMMIT)
 	docker push $(IMAGE_NAME):${VERSION}
 	docker push $(IMAGE_NAME):latest
-{% endif %}
+{% endif -%}
