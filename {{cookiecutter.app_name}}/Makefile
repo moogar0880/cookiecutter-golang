@@ -19,7 +19,7 @@ all: clean vendor binary test
 {% else -%}
 .PHONY: all
 all: clean vendor test
-{% endif -%}
+{% endif %}
 
 .PHONY: help
 help:
@@ -52,7 +52,7 @@ clean:
 .PHONY: clean
 clean:
 	go clean
-{% endif -%}
+{% endif %}
 
 .PHONY: test
 test:
@@ -111,4 +111,4 @@ push: tag
 	docker push $(IMAGE_NAME):$(GIT_COMMIT)
 	docker push $(IMAGE_NAME):${VERSION}
 	docker push $(IMAGE_NAME):latest
-{% endif -%}
+{%- endif -%}
