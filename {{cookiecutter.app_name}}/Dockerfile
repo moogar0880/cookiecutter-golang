@@ -1,37 +1,33 @@
 # Build Stage
 FROM {{cookiecutter.docker_build_image}} AS build-stage
 
-LABEL app="build-{{cookiecutter.app_name}}"
-LABEL REPO="https://github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}"
+WORKDIR /go/src/{{cookiecutter.git_root}}/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}
+COPY . /go/src/{{cookiecutter.git_root}}/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}
+RUN apk add --update --no-cache \
+    gcc \
+    git \
+    make \
+    musl-dev \
+    && make build/alpine
 
-ENV GOROOT=/usr/lib/go \
-    GOPATH=/gopath \
-    GOBIN=/gopath/bin \
-    PROJPATH=/gopath/src/github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}
+COPY . /go/src/{{cookiecutter.git_root}}/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}
+WORKDIR /gopath/src/{{cookiecutter.git_root}}/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}
 
-# Because of https://github.com/docker/docker/issues/14914
-ENV PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+RUN make build/alpine
 
-ADD . /gopath/src/github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}
-WORKDIR /gopath/src/github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}
+# essentials stage
+FROM alpine:latest as alpine
+RUN apk --no-cache add tzdata zip ca-certificates
+WORKDIR /usr/share/zoneinfo
+# -0 means no compression.  Needed because go's tz loader doesn't handle compressed data.
+RUN zip -r -0 /zoneinfo.zip .
 
-RUN make build-alpine
+# production image stage
+FROM scratch
+COPY --from=build-stage /go/src/{{cookiecutter.git_root}}/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/bin /bin
 
-# Final Stage
-FROM {{cookiecutter.docker_image}}
+ENV ZONEINFO /zoneinfo.zip
+COPY --from=alpine /zoneinfo.zip /
 
-ARG GIT_COMMIT
-ARG VERSION
-LABEL REPO="https://github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}"
-LABEL GIT_COMMIT=$GIT_COMMIT
-LABEL VERSION=$VERSION
-
-# Because of https://github.com/docker/docker/issues/14914
-ENV PATH=$PATH:/opt/{{cookiecutter.app_name}}/bin
-
-WORKDIR /opt/{{cookiecutter.app_name}}/bin
-
-COPY --from=build-stage /gopath/src/github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/bin/{{cookiecutter.app_name}} /opt/{{cookiecutter.app_name}}/bin/
-RUN chmod +x /opt/{{cookiecutter.app_name}}/bin/{{cookiecutter.app_name}}
-
-CMD /opt/{{cookiecutter.app_name}}/bin/{{cookiecutter.app_name}}
+COPY --from=alpine /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+ENTRYPOINT ["/bin/{{cookiecutter.app_name}}"]
