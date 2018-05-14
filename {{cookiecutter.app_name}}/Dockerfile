@@ -8,12 +8,12 @@ RUN apk add --update --no-cache \
     git \
     make \
     musl-dev \
-    && make build/alpine
+    && make binary/alpine
 
 COPY . /go/src/{{cookiecutter.git_root}}/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}
 WORKDIR /gopath/src/{{cookiecutter.git_root}}/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}
 
-RUN make build/alpine
+RUN make binary/alpine
 
 # essentials stage
 FROM alpine:latest as alpine

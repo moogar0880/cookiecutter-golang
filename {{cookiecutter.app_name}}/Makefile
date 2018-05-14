@@ -33,7 +33,7 @@ help:
 	@echo '    make vendor          runs {{cookiecutter.vendor_tool}} to fetch vendor dependencies.'
 	{% if cookiecutter.project_type == "service" -%}
 	@echo '    make binary          Compile the binary for this project.'
-	@echo '    make build/alpine    Compile optimized for alpine linux.'
+	@echo '    make binary/alpine    Compile optimized for alpine linux.'
 	@echo '    make package         Build final docker image with just the go binary inside'
 	@echo '    make push            Push tagged images to registry'
 	@echo '    make tag             Tag image created by package with latest, git commit and version'
@@ -87,8 +87,8 @@ binary:
 	@echo "GOPATH=${GOPATH}"
 	go build -ldflags "-X main.Version=${VERSION} -X main.GitCommit=${GIT_COMMIT}${GIT_DIRTY} -X main.VersionPrerelease=${PRERELEASE}" -o bin/${BIN_NAME}
 
-.PHONY: build/alpine
-build/alpine:
+.PHONY: binary/alpine
+binary/alpine:
 	@echo "building ${BIN_NAME} ${VERSION}"
 	@echo "GOPATH=${GOPATH}"
 	go build -ldflags '-w -linkmode external -extldflags "-static" -X main.GitCommit=${GIT_COMMIT}${GIT_DIRTY} -X main.VersionPrerelease=VersionPrerelease=RC' -o bin/${BIN_NAME}
